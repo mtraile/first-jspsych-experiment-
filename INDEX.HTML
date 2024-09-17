@@ -8,12 +8,20 @@
     </head>
     <body> </body>
     <script>
-        const jsPsych = initJsPsych();
+        const x = initJsPsych();
         const hello_trial = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: 'Hello world!'
+      stimulus: 'Hello world!', 
+      prompt: "what up fellas",
+      trial_duration : 10000,
+      choices: ['Y', 'N' ]
     }
-    jsPsych.run ([hello_trial ]) ;
+    const hello_trial2 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'Hello world 2!', 
+      choices: ['a', 'b' ]
+    }
+    x.run ([hello_trial, hello_trial2 ]);
         </script>
 
 </HTML>
