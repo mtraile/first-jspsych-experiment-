@@ -8,18 +8,17 @@
     </head>
     <body> </body>
     <script>
-        const x = initJsPsych();
-        const hello_trial = {
+        var x = initJsPsych();
+        var sentence = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: 'Hello world!', 
-      prompt: "what up fellas",
+      stimulus: 'I wish there was a foobly apple!', 
       trial_duration : 10000,
-      choices: ['Y', 'N' ]
+      choices: [' ' ]
     }
-    const hello_trial2 = {
+    var sentence = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: 'Hello world 2!', 
-      choices: ['a', 'b' ]
+      stimulus: 'Where is a foobly mipp?!', 
+      choices: [' ']
     }
     x.run ([hello_trial, hello_trial2 ]);
         </script>
