@@ -35,12 +35,22 @@
     type: jsPsychImageKeyboardResponse,
     stimulus: 'applehorse.png',
     choices: ['NO_KEYS'],
-    trial_duration: 500
+    trial_duration: 500,
     stimulus_width: 500,
     maintain_aspect_ratio: true,
 };
-    
-    jspsych.run ([sentence,attention,association, fixation, image]);
+var prime = {
+    type: jsPsychImageKeyboardResponse,
+    //  trial_duration: 300
+    stimulus: 'applehorse.png',
+    choices: ['NO_KEYS'],
+    stimulus_width: 500,
+    maintain_aspect_ratio: true,
+    prompt: "<br>foobly<br>"
+};
+
+  
+    jspsych.run ([sentence,attention,association, fixation, image,prime]);
         </script>
 
 </HTML>
