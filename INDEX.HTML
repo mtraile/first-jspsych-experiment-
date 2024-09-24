@@ -6,7 +6,7 @@
         <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
+        <script src="jspsych/modified-image-plugin.js"></script>
     </head>
     <body> </body>
     <script>
@@ -23,7 +23,7 @@
     };
     var association = {
       type: jsPsychSurveyText,
-  questions: [ {prompt: "foobly:"}],
+  questions: [ {prompt: "foobly"}],
     };
     var fixation = {
     type: jsPsychHtmlKeyboardResponse,
