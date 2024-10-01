@@ -21,7 +21,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
         var initial_instructions= {
             type: jsPsychInstructions,
             pages: [ 
-        'page 1 instructions ',
+     'page 1 instructions ',
      'page 2 instructions' ,
      'page 3 instructions.'
         ],
@@ -152,6 +152,6 @@ var priming_procedure = {
         randomize_order: true,
 };
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure]);
-    jspsych.run([priming_procedure])
+    jspsych.run([initial_instructions, training_plus_association, priming_instructions,priming_procedure])
         </script>
 </HTML>
