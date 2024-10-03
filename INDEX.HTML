@@ -11,6 +11,7 @@
         <script src="association.js"></script>
         <script src="priming.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
     </head>
     <body> </body>
     <script>
@@ -21,6 +22,20 @@
             }
         }
     );
+    // generate random ID 
+    var id= Math.floor(Math.random() * 100000000);
+    console.log("id=", id)
+    // tag all trials with ID
+
+    jspsych.data.addProperties({
+        ID: id
+    }
+);
+var preload= {
+    type:jsPsyschPreload,
+    auto_preload: true,
+    images: ['horseapple.png', 'applehorse.png']
+}
     
 var random_attention_trials = jspsych.randomization.sampleWithoutReplacement([ ... Array (35). keys ()]. map (x => x+ 5), 3);
 console.log ("random_attention_trials =" + random_attention_trials);
@@ -148,7 +163,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: ['NO_KEYS'],
-    trial_duration: 500, 
+    trial_duration: 5, 
     data:{typeoftrial: 'fixation'
          }
     };
@@ -156,7 +171,7 @@ console.log ("random_attention_trials =" + random_attention_trials);
     type: jsPsychImageKeyboardResponse,
     stimulus: jspsych.timelineVariable('image_path'),
     choices: ['NO_KEYS'],
-    trial_duration: 500,
+    trial_duration: 50,
     stimulus_width: 500,
     maintain_aspect_ratio: true,
     prompt:"<span style = 'font-size:300%'><br><br></span>",
@@ -168,7 +183,7 @@ var prime = {
     //  trial_duration: 300,
     stimulus: jspsych.timelineVariable('image_path'),
     choices: "NO_KEYS",
-    trial_duration: 500,
+    trial_duration: 50,
     stimulus_width: 500,
     maintain_aspect_ratio: true,
     prompt: function () {
@@ -184,10 +199,11 @@ var target = {
     stimulus: jspsych.timelineVariable('image_path'),
     // trial_duration: 300,
     choices: ['A', 'L'],
+    trial_duration: 50,
     stimulus_width: 500,
     maintain_aspect_ratio: true,
     prompt:function () {
-        return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('target_word')) + "<br></span>";
+        return "<span style= 'font-size: 200%'><br>" + String (jspsych.timelineVariable('prime_word')) + "<br></span>";
 },
 data:{
     typeoftrial: 'target',
@@ -195,7 +211,8 @@ data:{
 prime: jspsych.timelineVariable( 'prime_word'),
 type: jspsych.timelineVariable( 'type'),
 relatedness: jspsych.timelineVariable( 'relatedness'),
-correct_key: jspsych.timelineVariable( 'correct_key')
+correct_key: jspsych.timelineVariable( 'correct_key'),
+block_number: jspsych.timelineVariable( 'block_number')
 },
 on_finish: function(data) {
     data.correct = jspsych.pluginAPI.compareKeys(data.response, data.correct_key)   
@@ -220,10 +237,24 @@ var priming_feedback= {
 }
 var priming_procedure = {
   timeline:[fixation,image,prime,target,priming_feedback],
+        timeline_variables: test_stimuli,
+        randomize_order: true,
+        repetitions: 2 
+};
+var practice_procedure = {
+  timeline:[fixation,image,prime,target,priming_feedback],
         timeline_variables: practice_stimuli,
         randomize_order: true,
 };
-    //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,priming_procedure]);
-    jspsych.run([training_procedure])
+
+var thank_you= {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: 'Thank you! You can press any key to end the experiment.',
+    data: {
+        typeoftrial: 'thank_you'
+    }
+};
+    //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,pratice_ procedure,priming_procedure, thank_you]);
+    jspsych.run([preload, initial_instructions, training_plus_association, priming_instructions,practice_procedure,priming_procedure, thank_you])
         </script>
 </HTML>
