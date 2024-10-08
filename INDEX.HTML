@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head> 
-        <title> MiTRI'S EXPERIMENT </title>
+        <title> MITRI'S EXPERIMENT </title>
         <script src="https://unpkg.com/jspsych@7.3.3"></script>
         <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
@@ -12,6 +12,7 @@
         <script src="priming.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@2.0.0"></script>
     </head>
     <body> </body>
     <script>
@@ -251,12 +252,58 @@ var practice_procedure = {
 
 var thank_you= {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: 'Thank you! You can press any key to end the experiment.',
+    stimulus: 'Thank you! On the next page we will conduct a quick demographic survey for our records. You can press any key to move to the survey.',
     data: {
         typeoftrial: 'thank_you'
     }
 };
+var demographics = {
+      type: jsPsychSurveyText,
+  questions: [ {prompt: "1.How old are you?"},
+  {prompt:"2.What is your gender?"},
+  {prompt: "3.How many years of formal education have you had?"},
+  {prompt:"4.Are you of Hispanic, Latino/a/x or of Spanish origin?"},
+]
+};
+var participant_race= {
+    type: jsPsychSurveyMultiSelect,
+  questions: [
+    {
+      prompt: "5.Please specify all the racial categories that apply to you:", 
+      options: ["American Indian/Alaskan Native","Asian","Black/African American", "Native Hawaiian or Other Pacific Islander","White/Caucasian", "More than one race", "other"], 
+      horizontal: true,
+      required: true,
+      name: 'race',
+      on_finish: function(data) {
+        data.response= data.response.race
+    }
+    }, 
+    {
+    prompt: "6.Please indicate what time of the day you feel most alert:",
+    options:["Morning", "Afternoon", "Evening"," No differences"],
+      horizontal: true,
+      required: true,
+      name: 'time of day most alert'},
+{
+      prompt: "7. What is your dominant hand?", 
+      options: ["Right","Left","Ambidextrous"],
+      horizontal: true,
+      required: true,
+      name: 'dominant hand'
+}
+]
+};
+  var demographics1 = {
+    type: jsPsychSurveyText,
+ questions: [ {prompt:" 8.Is English your first language? (Yes/No)"},
+  {prompt: "8a.If responded NO to question 8: What is your first language?"},
+  {prompt: "8b.If responded NO to question 8: At what age did you learn English?"},
+  {prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)"},
+  ],
+  data:{ typeoftrial: 'participant demographics'}
+};
+
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,pratice_procedure,priming_procedure, thank_you]);
-    jspsych.run([practice_procedure,priming_procedure, thank_you])
+    jspsych.run([thank_you, demographics,participant_race, demographics1])
         </script>
 </HTML>
