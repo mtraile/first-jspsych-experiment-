@@ -327,10 +327,10 @@ var dominant_hand = {
 var demographics_1 = {
     type: jsPsychSurveyText,
     questions: [
-        { prompt: "8. Is English your first language? (Yes/No)" },
-        { prompt: "8a. If responded NO to question 8: What is your first language?" },
-        { prompt: "8b. If responded NO to question 8: At what age did you learn English?" },
-        { prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill, etc.)" }
+        { prompt: "8. Is English your first language? (Yes/No)", name: 'English 1st language'},
+        { prompt: "8a. If responded NO to question 8: What is your first language?", name: 'what_first_language' },
+        { prompt: "8b. If responded NO to question 8: At what age did you learn English?", name: 'age_learn_english'},
+        { prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill, etc.)", name: 'other'}
     ],
     on_finish: function(data) {
         console.log("Language and other:", data.response);
