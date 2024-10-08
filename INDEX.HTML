@@ -267,8 +267,7 @@ var demographics = {
 };
 var participant_race= {
     type: jsPsychSurveyMultiSelect,
-  questions: [
-    {
+  questions: {
       prompt: "5.Please specify all the racial categories that apply to you:", 
       options: ["American Indian/Alaskan Native","Asian","Black/African American", "Native Hawaiian or Other Pacific Islander","White/Caucasian", "More than one race", "other"], 
       horizontal: true,
@@ -276,22 +275,24 @@ var participant_race= {
       name: 'race',
       on_finish: function(data) {
         data.response= data.response.race
-    }
-    }, 
-    {
+    },
     prompt: "6.Please indicate what time of the day you feel most alert:",
     options:["Morning", "Afternoon", "Evening"," No differences"],
       horizontal: true,
       required: true,
-      name: 'time of day most alert'},
-{
-      prompt: "7. What is your dominant hand?", 
+      name: 'time of day most alert',
+      on_finish: function(data) {
+        data.response= data.response.race
+    },
+      prompt: "7.What is your dominant hand?", 
       options: ["Right","Left","Ambidextrous"],
       horizontal: true,
       required: true,
-      name: 'dominant hand'
+      name: 'dominant_hand',
+      on_finish: function(data) {
+        data.response= data.response.dominant_hand
+    }
 }
-]
 };
   var demographics1 = {
     type: jsPsychSurveyText,
@@ -300,9 +301,9 @@ var participant_race= {
   {prompt: "8b.If responded NO to question 8: At what age did you learn English?"},
   {prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)"},
   ],
-  data:{ typeoftrial: 'participant demographics'}
+  on_finish: function(data) {
+    data.response= data.response.dominant_hand
 };
-
     //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,pratice_procedure,priming_procedure, thank_you]);
     jspsych.run([thank_you, demographics,participant_race, demographics1])
         </script>
