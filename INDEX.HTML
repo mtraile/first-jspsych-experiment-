@@ -258,53 +258,88 @@ var thank_you= {
     }
 };
 var demographics = {
-      type: jsPsychSurveyText,
-  questions: [ {prompt: "1.How old are you?"},
-  {prompt:"2.What is your gender?"},
-  {prompt: "3.How many years of formal education have you had?"},
-  {prompt:"4.Are you of Hispanic, Latino/a/x or of Spanish origin?"},
-]
-};
-var participant_race= {
-    type: jsPsychSurveyMultiSelect,
-  questions: {
-      prompt: "5.Please specify all the racial categories that apply to you:", 
-      options: ["American Indian/Alaskan Native","Asian","Black/African American", "Native Hawaiian or Other Pacific Islander","White/Caucasian", "More than one race", "other"], 
-      horizontal: true,
-      required: true,
-      name: 'race',
-      on_finish: function(data) {
-        data.response= data.response.race
-    },
-    prompt: "6.Please indicate what time of the day you feel most alert:",
-    options:["Morning", "Afternoon", "Evening"," No differences"],
-      horizontal: true,
-      required: true,
-      name: 'time of day most alert',
-      on_finish: function(data) {
-        data.response= data.response.race
-    },
-      prompt: "7.What is your dominant hand?", 
-      options: ["Right","Left","Ambidextrous"],
-      horizontal: true,
-      required: true,
-      name: 'dominant_hand',
-      on_finish: function(data) {
-        data.response= data.response.dominant_hand
-    }
-}
-};
-  var demographics1 = {
     type: jsPsychSurveyText,
- questions: [ {prompt:" 8.Is English your first language? (Yes/No)"},
-  {prompt: "8a.If responded NO to question 8: What is your first language?"},
-  {prompt: "8b.If responded NO to question 8: At what age did you learn English?"},
-  {prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)"},
-  ],
-  on_finish: function(data) {
-    data.response= data.response.dominant_hand
+    questions: [
+        { prompt: "1. How old are you?", name: 'age' },
+        { prompt: "2. What is your gender?", name: 'gender' },
+        { prompt: "3. How many years of formal education have you had?", name: 'education_years' },
+        { prompt: "4. Are you of Hispanic, Latino/a/x or of Spanish origin?", name: 'hispanic_origin' }
+    ],
+    on_finish: function(data) {
+        // Log each response to the console
+        console.log("Age:", data.response.age);
+        console.log("Gender:", data.response.gender);
+        console.log("Years of Education:", data.response.education_years);
+        console.log("Hispanic Origin:", data.response.hispanic_origin);
+    }
 };
-    //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,pratice_procedure,priming_procedure, thank_you]);
-    jspsych.run([thank_you, demographics,participant_race, demographics1])
+
+var participant_race = {
+    type: jsPsychSurveyMultiSelect,
+    questions: [
+        {
+            prompt: "5. Please specify all the racial categories that apply to you:",
+            options: ["American Indian/Alaskan Native", "Asian", "Black/African American", "Native Hawaiian or Other Pacific Islander", "White/Caucasian", "More than one race", "Other"],
+            horizontal: true,
+            required: true,
+            name: 'race'
+        }
+    ],
+    on_finish: function(data) {
+        console.log("Racial categories selected:", data.response.race);
+    }
+};
+
+var time_of_day_alert = {
+    type: jsPsychSurveyMultiSelect,
+    questions: [
+        {
+            prompt: "6. Please indicate what time of the day you feel most alert:",
+            options: ["Morning", "Afternoon", "Evening", "No differences"],
+            horizontal: true,
+            required: true,
+            name: 'time_of_day_most_alert'
+        }
+    ],
+    data: { typeoftrial: 'time_of_day' },
+    on_finish: function(data) {
+        console.log("Time of day most alert:", data.response.time_of_day_most_alert);
+    }
+};
+
+var dominant_hand = {
+    type: jsPsychSurveyMultiSelect,
+    questions: [
+        {
+            prompt: "7. What is your dominant hand?",
+            options: ["Right", "Left", "Ambidextrous"],
+            horizontal: true,
+            required: true,
+            name: 'dominant_hand'
+        }
+    ],
+    data: { typeoftrial: 'dominant_hand' },
+    on_finish: function(data) {
+        console.log("Dominant hand:", data.response.dominant_hand);
+    }
+};
+
+var demographics_1 = {
+    type: jsPsychSurveyText,
+    questions: [
+        { prompt: "8. Is English your first language? (Yes/No)" },
+        { prompt: "8a. If responded NO to question 8: What is your first language?" },
+        { prompt: "8b. If responded NO to question 8: At what age did you learn English?" },
+        { prompt: "9. Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill, etc.)" }
+    ],
+    on_finish: function(data) {
+        console.log("Language and other:", data.response);
+    }
+};
+
+var timeline = [participant_race, time_of_day_alert, dominant_hand, demographics_1];
+
+    //jspsych.run ([initial_instructions, training_plus_association, priming_instructions,pratice_procedure,priming_procedure, thank_you, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1]);
+    jspsych.run([initial_instructions, training_plus_association, priming_instructions,pratice_procedure,priming_procedure, thank_you, demographics,participant_race, time_of_day_alert, dominant_hand, demographics_1])
         </script>
 </HTML>
