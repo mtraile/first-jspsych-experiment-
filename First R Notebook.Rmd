@@ -153,7 +153,68 @@ priming_data %>%
   theme_bw() +
   scale_fill_grey()
 ```
+# linear models
+```{r}
+data(women)
+women %>%
+ggplot(aes(x=weight, y=height)) +
+  geom_point()+
+geom_smooth(method= "lm" )+
+  theme_classic()
+```
 
+# load packages
+```{r}
+library(tidyverse)
+```
 
+```{r}
+women %>%
+ggplot(aes(x=weight, y=height)) +
+  geom_point()+
+geom_smooth(method= "lm" )+
+  theme_classic()
+women_model = lm(data = women,height ~weight)
+summary(women_model)
+```
 
+#install car package
+```{r}
+#install.packages("car")
+car:: Anova(women_model)
+```
+# iris again 
+```{r}
+data(iris)
+View(iris)
+
+iris%>%
+  group_by(Species)%>%
+  summarise(mean_length=mean(Petal.Length))
+
+iris%>%
+  ggplot(aes(x=Species, y=Petal.Length))+
+geom_boxplot()+
+theme_classic()
+```
+#ANOVA for iris 
+```{r}
+iris_model=lm(data = iris, Petal.Length~Species)
+car:: Anova(iris_model)
+```
+Species sig predicted petal length, F(2,147) = 1180.2, p< 0.001
+# install emmeans
+```{r}
+#install.packages("emmeans")
+emmeans:: emmeans(iris_model,
+                  pairwise~ Species,
+                  adjust= "tukey")
+```
+Follow up tests indicate that setosa's petal length is sig diff from both versicolor (t(147)= -32.51, p<.001) and virginica(t(147)=-47.521, p<.0001)
+
+```{r}
+priming_data %>%
+  group_by(ID,relatedness,type)%>%
+  count()
+```
 
