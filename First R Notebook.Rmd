@@ -217,4 +217,109 @@ priming_data %>%
   group_by(ID,relatedness,type)%>%
   count()
 ```
+#install new package with multiple IVS
+```{r}
+#install.packages("datarium")
+```
 
+```{r}
+data("jobsatisfaction", package = "datarium")
+View(jobsatisfaction)
+```
+
+#to visualize
+```{r}
+jobsatisfaction%>%
+ggplot()+
+  geom_boxplot(mapping = aes(x = gender, y = score, fill = education_level))
+```
+#reminder interaction is intersecting lines on plot. difference in means between IV1s levels differ based on levels of IV2
+
+#separate terms for main effects and interactions
+```{r}
+job_model = lm(data = jobsatisfaction, score ~ gender + education_level +gender:education_level)
+
+car :: Anova(job_model)
+```
+#interaction with gender and education level. no main effect 
+#An ANOVA was conducted. No main effect of gender was reported (F(1, 52)= 0.75, p = 0.392.
+#There is a main effect of education level (F(2, 52)= 187.89, p < 0.001).
+#There is also a significant interaction between gender and education (F(2, 52)= 7.339, p = 0.002)
+
+#using this for pairwise comparisons
+
+```{r}
+emmeans :: emmeans (job_model,
+                    pairwise~ gender | education_level,
+                    adjust = "tukey")
+```
+
+#Looking for something goin on in the contrast area.
+#Tukey adjust follow-up t-tyests indicate that male vs female job interaction level does not deviate significantly at the college or school level but males have higher job satusfaction at tge university level compared to females.
+#ASSUMPTIONS
+#lm is the assumption that data can be broken down linearly (no squared or cubed terms)
+#normality of residuals. whatever is leftover from the model is normally distributed
+#homogeneity of variance
+#independence of variance. no within-subjects observations with data. all between-subjects
+
+#Inspecting the model
+```{r}
+#install.packages("performance", dependencies = TRUE)
+#install.packages("see", dependencies = TRUE)
+#install.packages("patchwork", dependencies = TRUE)
+```
+
+```{r}
+library(performance)
+check_model(job_model)
+```
+#Gives you what is expected as a description and then shows you the plot of your data. Ours is not perefcet but it is okay.No major violations in assumptions were depicted here.
+
+```{r}
+priming_data %>% count()
+```
+#Checked that this has 492 particiopants
+
+```{r}
+rt_lm_model = lm(data = priming_data, rt ~relatedness + type + relatedness : type)
+car :: Anova(rt_lm_model)
+check_model(rt_lm_model)
+```
+#We have multiple observations for the same person because one person is doing the different conditions (unrelated shared and shared related), so we cannot use the ANOVA because this is not independent
+
+#want to use Repeated Measure ANOVA for our data
+```{r}
+savic %>% 
+  filter(typeoftrial == "target") %>%
+  filter(relatedness %in% c("related", "unrelated") & type %in% c("direct", "shared")) %>% 
+  group_by(ID, relatedness, type) %>% 
+  count()
+```
+#Each participnat did 16 trials of each one with equal number of trials before exclusions.
+
+#
+```{r}
+priming_data %>%
+  group_by(ID, relatedness, type) %>%
+  count()
+```
+#Incorrect trials or bad reaction time resulted in removing trials. Unbalanced reepeated measures (time)
+#ANOVA limited by continuous DVs (accuracy is not continuous), can only do categorical IVs, cannot deal with missing data, cannot handle nestered/clustered data/ cannot handle unbalanced data
+
+#solution is flexible LINEAR MIXED EFFECTS MODEL. parents of anova and t-test
+```{r}
+#install.packages("lmerTest")
+library(lmerTest)
+
+rt_model = lmer(data =priming_data, rt~ relatedness*type + (1|ID))
+```
+#lmer linear mixed effects model
+#relatedness*type is shorthand for relatedness +type +
+#unit of analysis is at the level of the individual
+
+```{r}
+car::Anova(rt_model)
+nobs(rt_model)
+check_model = rt_model
+```
+#report a chi square
