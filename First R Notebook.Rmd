@@ -219,7 +219,10 @@ priming_data %>%
 ```
 #install new package with multiple IVS
 ```{r}
-#install.packages("datarium")
+install.packages("datarium")
+```
+```{r}
+library(datarium)
 ```
 
 ```{r}
@@ -264,9 +267,9 @@ emmeans :: emmeans (job_model,
 
 #Inspecting the model
 ```{r}
-#install.packages("performance", dependencies = TRUE)
-#install.packages("see", dependencies = TRUE)
-#install.packages("patchwork", dependencies = TRUE)
+install.packages("performance", dependencies = TRUE)
+install.packages("see", dependencies = TRUE)
+install.packages("patchwork", dependencies = TRUE)
 ```
 
 ```{r}
@@ -323,3 +326,37 @@ nobs(rt_model)
 check_model = rt_model
 ```
 #report a chi square
+```{r}
+install.packages("ggthemes")
+```
+
+```{r}
+library(ggthemes)
+```
+# reproduce plot 
+```{r}
+counts= jobsatisfaction%>%
+  group_by(gender,education_level)%>%
+  count()
+
+mean_scores= jobsatisfaction%>%
+  group_by(gender, education_level) %>%
+  summarise(mean_score= mean(score), sd_score= sd(score))%>%
+left_join(counts)%>%
+  mutate(SE= sd_score/n,
+         ymin= mean_score - 1.96*SE,
+         ymax= mean_score + 1.96* SE)
+
+
+mean_scores %>%
+ggplot(aes(x = education_level, y = mean_score, fill = gender)) +
+  geom_col (position = "dodge")+
+  geom_errorbar(aes(ymin = ymin, ymax= ymax),
+                width= .25,
+                position = position_dodge(width= .9))+
+  geom_point(data= jobsatisfaction, aes(x= education_level, y= score, group= gender),
+             position= position_jitterdodge(),
+             alpha= 0.3)
+
+```
+
