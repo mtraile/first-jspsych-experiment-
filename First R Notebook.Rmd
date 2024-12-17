@@ -267,9 +267,9 @@ emmeans :: emmeans (job_model,
 
 #Inspecting the model
 ```{r}
-install.packages("performance", dependencies = TRUE)
-install.packages("see", dependencies = TRUE)
-install.packages("patchwork", dependencies = TRUE)
+#install.packages("performance", dependencies = TRUE)
+#install.packages("see", dependencies = TRUE)
+#install.packages("patchwork", dependencies = TRUE)
 ```
 
 ```{r}
@@ -327,7 +327,7 @@ check_model = rt_model
 ```
 #report a chi square
 ```{r}
-install.packages("ggthemes")
+#install.packages("ggthemes")
 ```
 
 ```{r}
@@ -358,5 +358,9 @@ ggplot(aes(x = education_level, y = mean_score, fill = gender)) +
              position= position_jitterdodge(),
              alpha= 0.3)
 
+```
+```{r}
+unique_values= unique(final_data$correct)
+print(unique_values)
 ```
 
